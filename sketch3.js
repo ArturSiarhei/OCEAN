@@ -82,7 +82,7 @@ const sketch3 = (p) => {
     p.text("Mesopelagic\nzone", textX, textY);
 
     // Текстовый блок снизу слева с отступом 100 слева и 200 снизу, max ширина 600px
-    const blockText = `Mesopelagic Zone, or twilight zone, ranges from 200 to 1000 meters deep. Sunlight fades quickly here, creating a dim environment where photosynthesis can’t occur. Despite low light, many organisms thrive by using bioluminescence to hunt, communicate, or avoid predators. Typical inhabitants include lanternfish, glowing jellyfish, and deep-sea squid. This zone serves as a key transition between the surface and deep ocean, playing an important role in nutrient and carbon cycling.`;
+    const blockText = `Mesopelagic Zone, or twilight zone, extends from 200 to 1000 meters deep. Sunlight fades quickly, creating a dim environment where photosynthesis stops. Despite low light, many organisms use bioluminescence to hunt, communicate, or avoid predators. Common inhabitants include lanternfish, glowing jellyfish, and deep-sea squid. This zone is a key transition between surface and deep ocean, important for nutrient and carbon cycling.`;
 
     p.textSize(20);
     p.textFont('Quicksand');

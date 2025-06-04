@@ -37,7 +37,16 @@ const sketch1 = (p) => {
     const textDescent = p.textDescent();
     const textBottom = centerY + textDescent / 2;
 
+    // Главный текст в центре
     p.text('OCEAN', centerX, textBottom);
+
+    // Дополнительный текст "ZONES" у нижнего края
+    const zonesFontSize = 40;
+    p.textSize(zonesFontSize);
+    p.textAlign(p.CENTER, p.BOTTOM);
+    p.fill(255);
+    p.textFont('Quicksand');
+    p.text('ZONES', centerX, p.height - 50);
 
     drawLineWaves(textBottom, p.height);
   };

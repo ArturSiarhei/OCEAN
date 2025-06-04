@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>OCEAN Sections</title>
+  
+  <!-- Подключение шрифта Quicksand из Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Quicksand&display=swap" rel="stylesheet" />
+
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      overflow: auto;
+      scroll-behavior: smooth;
+      font-family: 'Quicksand', sans-serif;
+    }
+
+    .section {
+      width: 100vw;
+      height: 100vh;
+      position: relative;
+    }
+
+    canvas {
+      display: block;
+      position: absolute;
+      top: 0;
+      left: 0;
+      z-index: 0;
+    }
+
+    /* Углы как у видоискателя */
+    .viewfinder-corners::before {
+      content: "";
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      pointer-events: none;
+      z-index: 9999;
+      background:
+        /* Верхний левый угол */
+        linear-gradient(to right, #ffffff 50px, transparent 50px) top 50px left 50px,
+        linear-gradient(to bottom, #ffffff 50px, transparent 50px) top 50px left 50px,
+
+        /* Верхний правый угол */
+        linear-gradient(to left, #ffffff 50px, transparent 50px) top 50px right 50px,
+        linear-gradient(to bottom, #ffffff 50px, transparent 50px) top 50px right 50px,
+
+        /* Нижний левый угол */
+        linear-gradient(to right, #ffffff 50px, transparent 50px) bottom 50px left 50px,
+        linear-gradient(to top, #ffffff 50px, transparent 50px) bottom 50px left 50px,
+
+        /* Нижний правый угол */
+        linear-gradient(to left, #ffffff 50px, transparent 50px) bottom 50px right 50px,
+        linear-gradient(to top, #ffffff 50px, transparent 50px) bottom 50px right 50px;
+      background-repeat: no-repeat;
+      background-size: 50px 2px, 2px 50px;
+    }
+  </style>
+</head>
+<body class="viewfinder-corners">
+
+  <div id="section1" class="section"></div>
+  <div id="section2" class="section"></div>
+  <div id="section3" class="section"></div>
+  <div id="section4" class="section"></div>
+
+  <script src="https://cdn.jsdelivr.net/npm/p5@1.9.0/lib/p5.min.js"></script>
+  <script src="sketch1.js"></script>
+  <script src="sketch2.js"></script>
+  <script src="sketch3.js"></script>
+  <script src="sketch4.js"></script>
+</body>
+</html>

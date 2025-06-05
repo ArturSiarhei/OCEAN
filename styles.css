@@ -1,0 +1,153 @@
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  overflow: hidden;
+  font-family: 'Quicksand', sans-serif;
+}
+
+.snap-container {
+  height: 100vh;
+  width: 100vw;
+  overflow-y: scroll;
+  scroll-snap-type: y mandatory;
+  scroll-behavior: smooth;
+}
+
+.section {
+  width: 100vw;
+  height: 100vh;
+  position: relative; /* важно для абсолютного позиционирования внутри */
+  overflow: hidden;
+}
+
+#section1 {
+  background-color: #87cefa;
+}
+
+#section2 {
+  background-color: #0a326e;
+}
+
+#section3 {
+  background-color: #0a1e3c;
+}
+
+#section4 {
+  background-color: #0D192A;
+}
+
+/* Canvas должен быть позади */
+canvas {
+  position: absolute !important;
+  top: 0;
+  left: 0;
+  z-index: 0 !important;
+}
+
+/* Контейнер для центрирования по вертикали */
+#depth-wrapper {
+  position: fixed;
+  top: 150px;
+  right: 56px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  z-index: 10;
+  transform: none;
+}
+
+/* Фиксированная надпись глубины */
+.depth-label {
+  transform-origin: center right;
+  transform: rotate(-90deg);
+  color: white;
+  font-size: 14px;
+  font-family: 'Quicksand', sans-serif;
+  white-space: nowrap;
+  opacity: 1;
+  transition: opacity 0.8s ease;
+}
+
+/* Видоискатель (углы) */
+.viewfinder-corners::before {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+  z-index: 9999;
+  background:
+    /* Верхний левый угол */
+    linear-gradient(to right, #ffffff 50px, transparent 50px) top 50px left 50px,
+    linear-gradient(to bottom, #ffffff 50px, transparent 50px) top 50px left 50px,
+
+    /* Верхний правый угол */
+    linear-gradient(to left, #ffffff 50px, transparent 50px) top 50px right 50px,
+    linear-gradient(to bottom, #ffffff 50px, transparent 50px) top 50px right 50px,
+
+    /* Нижний левый угол */
+    linear-gradient(to right, #ffffff 50px, transparent 50px) bottom 50px left 50px,
+    linear-gradient(to top, #ffffff 50px, transparent 50px) bottom 50px left 50px,
+
+    /* Нижний правый угол */
+    linear-gradient(to left, #ffffff 50px, transparent 50px) bottom 50px right 50px,
+    linear-gradient(to top, #ffffff 50px, transparent 50px) bottom 50px right 50px;
+  background-repeat: no-repeat;
+  background-size: 50px 2px, 2px 50px;
+}
+
+/* Навигация точками слева */
+.dot-nav {
+  position: fixed;
+  left: 44px;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  flex-direction: column;
+  gap: 33px;
+  z-index: 10000;
+}
+
+.dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 100%;
+  background-color: transparent;
+  border: 2px solid white;
+  opacity: 0.4;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.dot.active {
+  background-color: white;
+  opacity: 1;
+}
+
+/* Tooltip */
+.tooltip {
+  position: fixed;
+  background-color: rgba(0, 38, 95, 0.15);
+  color: white;
+  padding: 12px 40px;
+  border-radius: 20px;
+  font-family: 'Quicksand', sans-serif;
+  font-size: 14px;
+  pointer-events: none;
+  white-space: nowrap;
+  z-index: 10001;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+.tooltip.visible {
+  opacity: 1;
+}

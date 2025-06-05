@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>OCEAN Sections</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Quicksand&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body class="viewfinder-corners">
+
+  <div class="dot-nav">
+    <div class="dot active" data-index="0" data-tooltip="Waves and Ocean Surface"></div>
+    <div class="dot" data-index="1" data-tooltip="Photic Zone (sunlit layer, down to 200 m)"></div>
+    <div class="dot" data-index="2" data-tooltip="Mesopelagic Zone (twilight layer, 200—1000 m)"></div>
+    <div class="dot" data-index="3" data-tooltip="Bathypelagic Zone (depth 1000—4000 m)"></div>
+  </div>
+
+  <div class="tooltip" id="tooltip"></div>
+
+  <main class="snap-container">
+    <div id="section1" class="section"></div>
+    <div id="section2" class="section"></div>
+    <div id="section3" class="section"></div>
+    <div id="section4" class="section"></div>
+  </main>
+
+  <!-- Обёртка для центрирования по вертикали -->
+  <div id="depth-wrapper">
+    <div id="fixed-depth-label" class="depth-label">0 m</div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/p5@1.9.0/lib/p5.min.js"></script>
+
+  <!-- Подключаем твои sketch-файлы -->
+  <script src="sketch1.js"></script>
+  <script src="sketch2.js"></script>
+  <script src="sketch3.js"></script>
+  <script src="sketch4.js"></script>
+
+  <script src="script.js"></script>
+
+</body>
+</html>

@@ -91,7 +91,7 @@ const sketch4 = (p) => {
       p.mouseX, p.mouseY, 0,
       p.mouseX, p.mouseY, radius
     );
-    gradient.addColorStop(0, 'rgba(6, 30, 67, 0.3)');
+    gradient.addColorStop(0, 'rgba(6, 30, 67, 0.5)');
     gradient.addColorStop(1, 'rgba(6, 30, 67, 0)');
 
     p.drawingContext.fillStyle = gradient;
@@ -150,7 +150,7 @@ const sketch4 = (p) => {
       this.pos = p.createVector(p.random(p.width), p.random(p.height));
       this.size = size;
       this.baseAlpha = 25;
-      this.speed = p5.Vector.random2D().mult(p.random(0.1, 0.3));
+      this.speed = p5.Vector.random2D().mult(p.random(0.1, 2));
       this.pulsePhase = p.random(p.TWO_PI);
     }
 

@@ -7,7 +7,7 @@ html, body {
 }
 
 .snap-container {
-  height: 100vh;
+  height: calc(var(--vh, 1vh) * 100);
   width: 100vw;
   overflow-y: scroll;
   scroll-snap-type: y mandatory;
@@ -16,8 +16,8 @@ html, body {
 
 .section {
   width: 100vw;
-  height: 100vh;
-  position: relative; /* важно для абсолютного позиционирования внутри */
+  height: calc(var(--vh, 1vh) * 100);
+  position: relative;
   overflow: hidden;
 }
 
@@ -82,19 +82,12 @@ canvas {
   pointer-events: none;
   z-index: 9999;
   background:
-    /* Верхний левый угол */
     linear-gradient(to right, #ffffff 50px, transparent 50px) top 50px left 50px,
     linear-gradient(to bottom, #ffffff 50px, transparent 50px) top 50px left 50px,
-
-    /* Верхний правый угол */
     linear-gradient(to left, #ffffff 50px, transparent 50px) top 50px right 50px,
     linear-gradient(to bottom, #ffffff 50px, transparent 50px) top 50px right 50px,
-
-    /* Нижний левый угол */
     linear-gradient(to right, #ffffff 50px, transparent 50px) bottom 50px left 50px,
     linear-gradient(to top, #ffffff 50px, transparent 50px) bottom 50px left 50px,
-
-    /* Нижний правый угол */
     linear-gradient(to left, #ffffff 50px, transparent 50px) bottom 50px right 50px,
     linear-gradient(to top, #ffffff 50px, transparent 50px) bottom 50px right 50px;
   background-repeat: no-repeat;
@@ -135,7 +128,7 @@ canvas {
   position: fixed;
   background-color: rgba(0, 38, 95, 0.15);
   color: white;
-  padding: 12px 40px;
+  padding: 6px 25px;
   border-radius: 20px;
   font-family: 'Quicksand', sans-serif;
   font-size: 14px;

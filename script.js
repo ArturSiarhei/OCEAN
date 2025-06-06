@@ -1,3 +1,13 @@
+// Установка CSS переменной --vh на основе window.innerHeight
+function setVh() {
+  const vh = window.innerHeight * 0.01;
+  document.documentElement.style.setProperty('--vh', `${vh}px`);
+}
+
+// Вызываем при загрузке и изменении размера окна
+window.addEventListener('resize', setVh);
+window.addEventListener('load', setVh);
+
 const container = document.querySelector('.snap-container');
 const sections = document.querySelectorAll('.section');
 const dots = document.querySelectorAll('.dot');
@@ -14,13 +24,12 @@ const depthTexts = [
 ];
 
 function scrollToSection(index) {
-  const sectionHeight = window.innerHeight;
+  const sectionHeight = window.innerHeight; // можно использовать window.innerHeight
   isScrolling = true;
   container.scrollTo({
     top: index * sectionHeight,
     behavior: 'smooth'
   });
-  // Блокируем повторный скролл во время анимации
   setTimeout(() => { isScrolling = false; }, 800);
 }
 
@@ -36,7 +45,6 @@ container.addEventListener('wheel', (e) => {
   scrollToSection(nextIndex);
 }, { passive: false });
 
-// Обработка кликов и ховер-событий по точкам навигации
 dots.forEach(dot => {
   dot.addEventListener('click', () => {
     const index = parseInt(dot.dataset.index, 10);
@@ -58,7 +66,6 @@ dots.forEach(dot => {
   });
 });
 
-// При скролле обновляем активные элементы и текст глубины
 container.addEventListener('scroll', () => {
   const currentIndex = Math.round(container.scrollTop / window.innerHeight);
 
@@ -75,7 +82,6 @@ container.addEventListener('scroll', () => {
   }
 });
 
-// При загрузке страницы выставляем активный первый слайд и текст глубины
 window.addEventListener('load', () => {
   sections.forEach((section, i) => section.classList.toggle('active', i === 0));
   if (depthLabel) {

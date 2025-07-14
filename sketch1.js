@@ -37,10 +37,8 @@ const sketch1 = (p) => {
     const textDescent = p.textDescent();
     const textBottom = centerY + textDescent / 2;
 
-    // Главный текст в центре
     p.text('OCEAN', centerX, textBottom);
 
-    // Дополнительный текст "ZONES" у нижнего края
     const zonesFontSize = 40;
     p.textSize(zonesFontSize);
     p.textAlign(p.CENTER, p.BOTTOM);
@@ -62,9 +60,9 @@ const sketch1 = (p) => {
     for (let y = 0; y < p.height; y++) {
       let t = p.map(y, 0, p.height, 0, 1);
 
-      let c1 = p.color('#FF6B95'); // розово-малиновый
-      let c2 = p.color('#FFD496'); // оранжевый
-      let c3 = p.color('#1C577A'); // тёмно-синий
+      let c1 = p.color('#FF6B95');
+      let c2 = p.color('#FFD496');
+      let c3 = p.color('#2C6379');
 
       let c;
       if (t < 0.5) {

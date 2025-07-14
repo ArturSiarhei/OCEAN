@@ -5,6 +5,8 @@ const sketch4 = (p) => {
   const maxBubbles = 30;
   let nextBubbleTime = 0;
   let canvas;
+  
+  let jellyfishes = [];
 
   p.setup = () => {
     const parent = document.getElementById('section4');
@@ -24,11 +26,15 @@ const sketch4 = (p) => {
       fireflies.push(new Firefly(p.random(2, 1)));
     }
 
+    for (let i = 0; i < 20; i++) {
+      jellyfishes.push(new Jellyfish(p.random(w), p.random(h)));
+    }
+
     nextBubbleTime = p.millis() + p.random(300, 3000);
   };
 
   p.draw = () => {
-    p.background('#061224');
+    setGradientBackground();
 
     drawCursorGlow();
 
@@ -40,6 +46,11 @@ const sketch4 = (p) => {
     for (let ff of fireflies) {
       ff.update();
       ff.show();
+    }
+
+    for (let j of jellyfishes) {
+      j.move();
+      j.display();
     }
 
     handleBubbles();
@@ -71,8 +82,8 @@ const sketch4 = (p) => {
     const descHeight = approxLines * lineHeight;
 
     // Координаты описания:
-    const descX = p.width - 200 - descMaxWidth;  // смещение слева от правого края
-    const descY = p.height - 200 - descHeight;   // отступ сверху, чтобы текст был выше на descHeight
+    const descX = p.width - 200 - descMaxWidth;
+    const descY = p.height - 200 - descHeight;
 
     p.textAlign(p.LEFT, p.TOP);
     p.text(description, descX, descY, descMaxWidth);
@@ -85,13 +96,22 @@ const sketch4 = (p) => {
     p.resizeCanvas(w, h);
   };
 
+  function setGradientBackground() {
+    let ctx = p.drawingContext;
+    let gradient = ctx.createLinearGradient(0, 0, 0, p.height);
+    gradient.addColorStop(0, '#0A1E3C');
+    gradient.addColorStop(1, '#061224');
+    ctx.fillStyle = gradient;
+    ctx.fillRect(0, 0, p.width, p.height);
+  }
+
   function drawCursorGlow() {
     const radius = 300;
     const gradient = p.drawingContext.createRadialGradient(
       p.mouseX, p.mouseY, 0,
       p.mouseX, p.mouseY, radius
     );
-    gradient.addColorStop(0, 'rgba(6, 30, 67, 0.5)');
+    gradient.addColorStop(0, 'rgba(6, 30, 67, 1.5)');
     gradient.addColorStop(1, 'rgba(6, 30, 67, 0)');
 
     p.drawingContext.fillStyle = gradient;
@@ -201,6 +221,45 @@ const sketch4 = (p) => {
       p.noStroke();
       p.fill(255, 255, 255, this.alpha);
       p.circle(this.pos.x, this.pos.y, this.size);
+    }
+  }
+
+  class Jellyfish {
+    constructor(x, y) {
+      this.x = x;
+      this.y = y;
+      this.size = p.random(20, 40);
+      this.speed = p.random(0.3, 1);
+      this.offset = p.random(p.TWO_PI);
+      this.alpha = p.random(40, 40);
+    }
+
+    move() {
+      this.y -= this.speed;
+      if (this.y + this.size < 0) {
+        this.y = p.height + this.size;
+        this.x = p.random(p.width);
+      }
+    }
+
+    display() {
+      p.noStroke();
+      for (let i = 10; i > 0; i--) {
+        p.fill(100, 200, 255, (this.alpha / i) * 0.2);
+        p.ellipse(this.x, this.y, this.size + i * 8);
+      }
+      p.fill(150, 220, 255, this.alpha);
+      p.ellipse(this.x, this.y, this.size);
+
+      p.stroke(150, 220, 255, this.alpha * 0.6);
+      p.strokeWeight(2);
+      p.noFill();
+      p.beginShape();
+      for (let i = 0; i < 5; i++) {
+        let xOff = p.sin(p.frameCount * 0.1 + i + this.offset) * 10;
+        p.vertex(this.x + xOff + i * 5 - 10, this.y + this.size / 2 + i * 10);
+      }
+      p.endShape();
     }
   }
 };

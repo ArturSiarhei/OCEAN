@@ -26,18 +26,25 @@ html, body {
 }
 
 #section2 {
-  background-color: #0a326e;
+  background-color: #FFFFFF;
 }
 
 #section3 {
-  background-color: #0a1e3c;
+  background-color: #FFFFFF;
 }
 
 #section4 {
-  background-color: #0D192A;
+  background-color: #FFFFFF;
 }
 
-/* Canvas должен быть позади */
+#section5 {
+  background-color: #FFFFFF;
+}
+
+#section6 {
+  background-color: #FFFFFF;
+}
+
 canvas {
   position: absolute !important;
   top: 0;
@@ -45,7 +52,6 @@ canvas {
   z-index: 0 !important;
 }
 
-/* Контейнер для центрирования по вертикали */
 #depth-wrapper {
   position: fixed;
   top: 150px;
@@ -59,7 +65,6 @@ canvas {
   transform: none;
 }
 
-/* Фиксированная надпись глубины */
 .depth-label {
   transform-origin: center right;
   transform: rotate(-90deg);
@@ -71,7 +76,6 @@ canvas {
   transition: opacity 0.8s ease;
 }
 
-/* Видоискатель (углы) */
 .viewfinder-corners::before {
   content: "";
   position: fixed;
@@ -94,7 +98,6 @@ canvas {
   background-size: 50px 2px, 2px 50px;
 }
 
-/* Навигация точками слева */
 .dot-nav {
   position: fixed;
   left: 44px;
@@ -123,7 +126,6 @@ canvas {
   opacity: 1;
 }
 
-/* Tooltip */
 .tooltip {
   position: fixed;
   background-color: rgba(0, 38, 95, 0.15);

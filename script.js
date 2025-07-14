@@ -1,10 +1,8 @@
-// Установка CSS переменной --vh на основе window.innerHeight
 function setVh() {
   const vh = window.innerHeight * 0.01;
   document.documentElement.style.setProperty('--vh', `${vh}px`);
 }
 
-// Вызываем при загрузке и изменении размера окна
 window.addEventListener('resize', setVh);
 window.addEventListener('load', setVh);
 
@@ -12,19 +10,20 @@ const container = document.querySelector('.snap-container');
 const sections = document.querySelectorAll('.section');
 const dots = document.querySelectorAll('.dot');
 const tooltip = document.getElementById('tooltip');
-const depthLabel = document.getElementById('fixed-depth-label'); // фиксированная надпись глубины
+const depthLabel = document.getElementById('fixed-depth-label');
 let isScrolling = false;
 
-// Тексты глубины для каждой секции
 const depthTexts = [
   '0 m',
   '0—200 m',
   '200—1000 m',
-  '1000—4000 m'
+  '1000—4000 m',
+  '4000—6000 m',
+  '6000+ m'
 ];
 
 function scrollToSection(index) {
-  const sectionHeight = window.innerHeight; // можно использовать window.innerHeight
+  const sectionHeight = window.innerHeight;
   isScrolling = true;
   container.scrollTo({
     top: index * sectionHeight,

@@ -3,16 +3,14 @@ const sketch2 = (p) => {
   let particles = [];
   let jellyfish = [];
   let bubbles = [];
+  let fishies = [];
   let canvas;
 
   let lastMouseX = null;
   let lastMouseY = null;
   let mouseStillFrames = 0;
 
-  // Таймер для создания пузырьков
   let nextBubbleTime = 0;
-
-  // Максимальное количество пузырьков одновременно
   const maxBubbles = 30;
 
   p.setup = () => {
@@ -37,6 +35,10 @@ const sketch2 = (p) => {
       jellyfish.push(new Jellyfish(p.random(p.width), p.random(p.height)));
     }
 
+    for (let i = 0; i < 20; i++) {
+      fishies.push(new Fish(p.random(p.width), p.random(p.height)));
+    }
+
     nextBubbleTime = p.millis() + p.random(100, 1000);
   };
 
@@ -46,6 +48,11 @@ const sketch2 = (p) => {
     for (let wave of lightWaves) wave.update(), wave.show();
     for (let particle of particles) particle.update(), particle.show();
     for (let j of jellyfish) j.update(), j.show();
+
+    for (let f of fishies) {
+      f.update();
+      f.show();
+    }
 
     handleBubbles();
 
@@ -76,8 +83,8 @@ const sketch2 = (p) => {
   function setGradientBackground() {
     for (let y = 0; y < p.height; y++) {
       let inter = p.map(y, 0, p.height, 0, 1);
-      let top = p.color(10, 50, 70);
-      let bottom = p.color(0, 100, 140);
+      let top = p.color(44, 99, 121);
+      let bottom = p.color(10, 50, 70);
       let c = p.lerpColor(top, bottom, inter);
       p.stroke(c);
       p.line(0, y, p.width, y);
@@ -92,7 +99,6 @@ const sketch2 = (p) => {
     const description = `Photic Zone is the upper layer of the ocean, extending down to about 200 meters where sunlight penetrates enough for photosynthesis. It’s a bright, vibrant environment teeming with marine life such as fish, corals, and jellyfish. This zone supports most of the ocean’s plant and animal life and plays a crucial role in the Earth’s oxygen production and carbon cycle.
 `;
 
-    // Заголовок
     const titleSize = 100;
     p.textFont('Quicksand');
     p.fill(255);
@@ -242,6 +248,40 @@ const sketch2 = (p) => {
       p.noStroke();
       p.fill(255, 255, 255, this.alpha);
       p.circle(this.pos.x, this.pos.y, this.size);
+    }
+  }
+
+  class Fish {
+    constructor(x, y) {
+      this.pos = p.createVector(x, y);
+      this.bodyWidth = p.random(20, 60);
+      this.bodyHeight = p.random(10, 40);
+      this.speed = p.random(0.5, 2);
+      this.direction = p.random() < 0.5 ? 1 : -1;
+    }
+
+    update() {
+      this.pos.x += this.speed * this.direction;
+      if (this.pos.x > p.width + this.bodyWidth) this.pos.x = -this.bodyWidth;
+      if (this.pos.x < -this.bodyWidth) this.pos.x = p.width + this.bodyWidth;
+    }
+
+    show() {
+      p.push();
+      p.translate(this.pos.x, this.pos.y);
+      p.scale(this.direction, 1);
+
+      p.noStroke();
+      p.fill(120, 138, 147, 100);
+      p.ellipse(0, 0, this.bodyWidth * 1.5, this.bodyHeight);
+
+      p.triangle(
+        -this.bodyWidth * 0.75, 0,
+        -this.bodyWidth * 1.2, this.bodyHeight * 0.5,
+        -this.bodyWidth * 1.2, -this.bodyHeight * 0.5
+      );
+
+      p.pop();
     }
   }
 };

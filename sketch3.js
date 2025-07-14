@@ -1,11 +1,12 @@
+let glowAlpha = 0;
+let glowDirection = 1;
+
 const sketch3 = (p) => {
-  let raysLayer;
   let particles = [];
   let fireflies = [];
   let eels = [];
-  let rayPositions = [];
-  const RAY_COUNT = 15;
   let bubbles = [];
+  let fishies = [];
   const maxBubbles = 30;
   let nextBubbleTime = 0;
   let canvas;
@@ -20,37 +21,29 @@ const sketch3 = (p) => {
 
     p.frameRate(60);
 
-    raysLayer = p.createGraphics(w, h);
-    raysLayer.noStroke();
-
     for (let i = 0; i < 120; i++) {
       particles.push(new Particle());
     }
 
-    for (let i = 0; i < 5; i++) {
+    for (let i = 0; i < 7; i++) {
       fireflies.push(new Firefly(p.random(3, 8)));
     }
 
     let eelPositionsX = [w * 0.2, w * 0.5, w * 0.8];
     let eelDirections = [1, 1, -1];
-    for (let i = 0; i < 3; i++) {
+    for (let i = 0; i < 5; i++) {
       eels.push(new Eel(eelPositionsX[i], p.random(h), eelDirections[i]));
     }
 
-    for (let i = 0; i < RAY_COUNT; i++) {
-      rayPositions[i] = p.random(w * 0.05, w * 0.95);
+    for (let i = 0; i < 5; i++) {
+      fishies.push(new MesopelagicFish(p.random(w), p.random(h)));
     }
 
     nextBubbleTime = p.millis() + p.random(300, 3000);
   };
 
   p.draw = () => {
-    p.background(10, 30, 60);
-
-    raysLayer.clear();
-    drawLightRays(raysLayer);
-    raysLayer.filter(p.BLUR, 7);
-    p.image(raysLayer, 0, 0);
+    setGradientBackground();
 
     for (let ptl of particles) {
       ptl.update();
@@ -67,9 +60,13 @@ const sketch3 = (p) => {
       eel.show();
     }
 
+    for (let fish of fishies) {
+      fish.update();
+      fish.show();
+    }
+
     handleBubbles();
 
-    // Рисуем текст "Mesopelagic zone" в 2 строки, справа 800px, сверху 100px
     const textX = p.width - 800;
     const textY = 100;
 
@@ -78,15 +75,14 @@ const sketch3 = (p) => {
     p.textAlign(p.LEFT, p.TOP);
     p.textSize(100);
     p.textFont('Quicksand');
-    p.textLeading(1 * 100);
+    p.textLeading(100);
     p.text("Mesopelagic\nzone", textX, textY);
 
-    // Текстовый блок снизу слева с отступом 100 слева и 200 снизу, max ширина 600px
     const blockText = `Mesopelagic Zone, or twilight zone, extends from 200 to 1000 meters deep. Sunlight fades quickly, creating a dim environment where photosynthesis stops. Despite low light, many organisms use bioluminescence to hunt, communicate, or avoid predators. Common inhabitants include lanternfish, glowing jellyfish, and deep-sea squid. This zone is a key transition between surface and deep ocean, important for nutrient and carbon cycling.`;
 
     p.textSize(20);
     p.textFont('Quicksand');
-    p.textLeading(1.4 * 20);
+    p.textLeading(28);
     p.textAlign(p.LEFT, p.BOTTOM);
 
     const blockX = 200;
@@ -94,6 +90,10 @@ const sketch3 = (p) => {
     const blockWidth = 600;
 
     p.text(blockText, blockX, blockY - p.textAscent(), blockWidth);
+
+    glowAlpha += glowDirection * 4;
+    if (glowAlpha > 200) glowDirection = -1;
+    if (glowAlpha < 80) glowDirection = 1;
   };
 
   p.windowResized = () => {
@@ -102,8 +102,6 @@ const sketch3 = (p) => {
     const h = parent.clientHeight;
 
     p.resizeCanvas(w, h);
-    raysLayer = p.createGraphics(w, h);
-    raysLayer.noStroke();
 
     let eelPositionsX = [w * 0.2, w * 0.5, w * 0.8];
     for (let i = 0; i < eels.length; i++) {
@@ -111,30 +109,19 @@ const sketch3 = (p) => {
       eels[i].pos.y = p.random(h);
     }
 
-    rayPositions = [];
-    for (let i = 0; i < RAY_COUNT; i++) {
-      rayPositions[i] = p.random(w * 0.05, w * 0.95);
+    for (let fish of fishies) {
+      fish.pos.x = p.random(w);
+      fish.pos.y = p.random(h);
     }
   };
 
-  function drawLightRays(pg) {
-    pg.blendMode(p.ADD);
-    for (let i = 0; i < RAY_COUNT; i++) {
-      let t = p.frameCount * 0.024 + i * 1.5;
-      let baseX = rayPositions[i] + p.sin(t * 0.7 + i) * 30;
-      let topWidth = 60 + p.sin(t * 1.5 + i) * 20;
-      let bottomWidth = 10;
-
-      for (let y = 0; y < p.height; y++) {
-        let inter = y / p.height;
-        let w = p.lerp(topWidth, bottomWidth, inter);
-        let alpha = p.map(y, 0, p.height, 30, 0);
-
-        pg.fill(255, 255, 230, alpha);
-        pg.rect(baseX - w / 2, y, w, 1);
-      }
-    }
-    pg.blendMode(p.BLEND);
+  function setGradientBackground() {
+    let ctx = p.drawingContext;
+    let gradient = ctx.createLinearGradient(0, 0, 0, p.height);
+    gradient.addColorStop(0, '#0A3246');
+    gradient.addColorStop(1, '#0A1E3C');
+    ctx.fillStyle = gradient;
+    ctx.fillRect(0, 0, p.width, p.height);
   }
 
   function handleBubbles() {
@@ -167,7 +154,6 @@ const sketch3 = (p) => {
       this.pos.add(this.vel);
       this.pos.x += p.sin(p.frameCount * 0.01 + this.pos.y) * 0.2;
       this.pos.y += p.cos(p.frameCount * 0.01 + this.pos.x) * 0.1;
-
       this.wrap();
     }
 
@@ -236,7 +222,6 @@ const sketch3 = (p) => {
     show() {
       p.push();
       p.translate(this.pos.x, this.pos.y);
-
       p.noFill();
       p.stroke(this.color);
       p.strokeWeight(3);
@@ -247,7 +232,6 @@ const sketch3 = (p) => {
         let x = p.map(i, 0, segments, 0, this.length);
         let phase = p.frameCount * 0.15;
         if (this.speed < 0) phase = -phase;
-
         let y = p.sin(i * 0.8 + phase) * 3;
         p.vertex(x, y);
       }
@@ -273,6 +257,82 @@ const sketch3 = (p) => {
       p.noStroke();
       p.fill(255, 255, 255, this.alpha);
       p.circle(this.pos.x, this.pos.y, this.size);
+    }
+  }
+
+  class MesopelagicFish {
+    constructor(x, y) {
+      this.pos = p.createVector(x, y);
+      this.baseBodyLength = p.random(30, 60);
+      this.baseBodyHeight = p.random(10, 25);
+      this.speed = p.random(0.5, 1.5);
+      this.direction = p.random() < 0.5 ? 1 : -1;
+      this.alpha = p.random(120, 180);
+      this.colorBody = p.color(100, 120, 140, this.alpha);
+      this.colorGlow = p.color(255, 230, 150, this.alpha * 0.7);
+      this.glowSize = p.random(12, 18);
+      this.scaleFactor = 1;
+    }
+
+    update() {
+      this.pos.x += this.speed * this.direction;
+      if (this.pos.x > p.width + this.baseBodyLength * this.scaleFactor) this.pos.x = -this.baseBodyLength * this.scaleFactor;
+      if (this.pos.x < -this.baseBodyLength * this.scaleFactor) this.pos.x = p.width + this.baseBodyLength * this.scaleFactor;
+    }
+
+    show() {
+      p.push();
+      p.translate(this.pos.x, this.pos.y);
+      if (this.direction < 0) {
+        p.scale(-1, 1);
+      }
+
+      p.scale(this.scaleFactor);
+
+      const w = this.baseBodyLength;
+      const h = this.baseBodyHeight;
+
+      const ctx = p.drawingContext;
+
+      ctx.shadowBlur = 15;
+      ctx.shadowColor = 'rgba(100, 120, 140, 0.8)';
+
+      let gradientBody = ctx.createLinearGradient(-w / 2, 0, w / 2, 0);
+      gradientBody.addColorStop(0, '#384861');
+      gradientBody.addColorStop(1, '#555750');
+
+      ctx.fillStyle = gradientBody;
+      ctx.beginPath();
+      ctx.ellipse(0, 0, w, h, 0, 0, p.TWO_PI);
+      ctx.fill();
+
+      p.noStroke();
+      p.fill(56, 72, 97, 100);
+      p.triangle(-w / 1.5, 0, -w / 1.5 - h, h * 0.7, -w / 1.5 - h * 2, -h);
+
+      ctx.shadowBlur = 0;
+
+      const glowX = w / 1.2;
+      const glowY = -h * 0.8;
+      const glowRadius = h * 0.4;
+
+      ctx.shadowBlur = 20;
+      ctx.shadowColor = `rgba(255, 230, 150, ${glowAlpha / 255})`;
+
+      let gradient = ctx.createRadialGradient(glowX, glowY, 0, glowX, glowY, glowRadius);
+      gradient.addColorStop(0, `rgba(255, 230, 150, ${glowAlpha / 255})`);
+      gradient.addColorStop(1, 'rgba(255, 230, 150, 0)');
+
+      ctx.fillStyle = gradient;
+      ctx.beginPath();
+      ctx.arc(glowX, glowY, glowRadius, 0, p.TWO_PI);
+      ctx.fill();
+
+      ctx.shadowBlur = 0;
+      p.fill(255, 230, 150, glowAlpha);
+      p.circle(glowX, glowY, h * 0.6);
+
+      p.pop();
     }
   }
 };
